@@ -1,0 +1,38 @@
+# EdgeDash configuration
+# Copy this file, fill in your details, and keep it out of version control
+# if it contains anything sensitive (it shouldn't — secrets go in .env).
+
+# The role you are targeting (used to filter and score job listings)
+target_role: "Data Analyst"
+
+# City filter for job searches
+target_city: "Bengaluru"
+
+# Keywords sent to job-board APIs / scrapers
+keywords:
+  - "data analyst"
+  - "business analyst"
+  - "SQL"
+  - "Python"
+  - "Power BI"
+  - "Tableau"
+  - "Excel"
+
+# Your current skills (used by Scorer and GapAnalyzer)
+my_skills:
+  - "Python"
+  - "SQL"
+  - "Excel"
+  - "pandas"
+  - "data visualisation"
+  - "statistics"
+
+# Years of relevant experience (used in fit scoring)
+experience_years: 2
+
+# Path to the SQLite database file (relative to repo root)
+# Week-4 note: this field is ignored when POSTGRES_URL env var is set
+db_path: "edgedash.db"
+
+# Minimum fit score (0–100) a listing must have to appear on the dashboard
+min_fit_score: 55

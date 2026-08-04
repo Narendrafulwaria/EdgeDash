@@ -73,14 +73,11 @@ python -m venv .venv
 # source .venv/bin/activate   # macOS / Linux
 
 pip install pyyaml
-
-# 3. Configure
-# config.yaml is already present and filled in for a Data Analyst in Bengaluru.
-# Edit the fields that apply to you:
-#   target_role, target_city, keywords, my_skills, experience_years, min_fit_score
 ```
 
-**Secrets** (API keys, DB connection strings) go in a `.env` file — never in `config.yaml`.
+Edit `config.yaml` to match your profile — set `target_role`, `target_city`,
+`keywords`, `my_skills`, `experience_years`, and `min_fit_score`. Secrets
+(API keys, DB connection strings) go in a `.env` file, never in `config.yaml`.
 
 ## Running
 
@@ -95,8 +92,8 @@ The cycle prints:
 3. Each agent's result as it runs
 4. A summary table with total records touched and any failures
 
-Run it twice in a row to see deduplication in action — the second run will
-report 0 new listings and explain why.
+Run it twice in a row to see deduplication in action — the second run reports
+0 new listings because every id is already in the database.
 
 ## Design decisions
 
@@ -108,11 +105,11 @@ week 4, only that one file changes — the rest of the codebase is unaffected.
 **Listing IDs are stable hashes.**
 Each listing's primary key is a SHA-256 hash of `source + url`. The same job
 reappearing in a future fetch produces the same ID, so `INSERT OR IGNORE`
-silently skips it. This means `upsert_listings` can return the count of
-genuinely new rows, making deduplication observable without any extra queries.
+silently skips it. This makes deduplication observable: `upsert_listings`
+returns the count of genuinely new rows, not the total passed in.
 
 **The Orchestrator delegates instead of doing the work itself.**
 Keeping fetch, score, and analysis logic out of the Orchestrator means each
-concern is isolated, independently testable, and swappable. The Orchestrator's
-only job is to read state, decide what to run, and report results — a boundary
-that stays stable even as the agents evolve.
+concern is isolated, independently testable, and swappable. The Orchestrator
+reads state, decides what to run, and reports results — a boundary that stays
+stable even as the agents evolve week by week.

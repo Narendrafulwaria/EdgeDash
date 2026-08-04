@@ -19,7 +19,7 @@ env/
 .env.*
 !.env.example
 
-# Database files — edgedash.db is runtime state, not source
+# Database files — runtime state, not source
 *.db
 *.db-wal
 *.db-shm
